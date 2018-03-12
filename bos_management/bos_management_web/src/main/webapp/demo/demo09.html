@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../js/ztree/zTreeStyle.css">
+<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/ztree/jquery.ztree.all-3.5.js"></script>
+
+<script type="text/javascript">
+function show(){
+	/*  $.messager.alert('My Title', 'Here is a message!','info'); */
+	/*  $.messager.confirm('确认','您确认想要删除记录吗？',function(r){    
+		    if (r){    
+		        alert('确认删除');    
+		    }    
+		});   */
+	 /* $.messager.confirm('确认对话框', '您想要退出该系统吗？', function(r){
+			if (r){
+			   
+			}
+		}); */
+	 /* $.messager.prompt('提示信息', '请输入你的姓名：', function(r){
+			if (r){
+				alert('你的姓名是：' + r);
+			}
+		}); */
+
+	// $.messager.progress(); 
+
+	$.messager.show({
+		title:'我的消息',
+		msg:'消息将在2秒后关闭。',
+		timeout:2000,
+		showType:'show'
+	});
+
+
+
+
+}
+
+</script>
+</head>
+<body>
+<body>
+
+	<a href="#" id="mb" class="easyui-menubutton" onclick="show()"
+		data-options="menu:'#mm',iconCls:'icon-edit'">Edit</a>
+	<h2>Alert Messager</h2>
+			<p>Click on each button to display different alert message box.</p>
+			<div style="margin: 20px 0;">
+				<a href="#" class="easyui-linkbutton" onclick="alert1()">Alert</a>
+				<a href="#" class="easyui-linkbutton" onclick="alert2()">Error</a>
+				<a href="#" class="easyui-linkbutton" onclick="alert3()">Info</a>
+				<a href="#" class="easyui-linkbutton" onclick="alert4()">Question</a>
+				<a href="#" class="easyui-linkbutton" onclick="alert5()">Warning</a>
+			</div>
+			<script>
+		        function alert1() {
+		            $.messager.alert('My Title', 'Here is a message!');
+		        }
+		        function alert2() {
+		            $.messager.alert('My Title', 'Here is a error message!', 'error');
+		        }
+		        function alert3() {
+		            $.messager.alert('My Title', 'Here is a info message!', 'info');
+		        }
+		        function alert4() {
+		            $.messager.alert('My Title', 'Here is a question message!',
+		                            'question');
+		        }
+		        function alert5() {
+		            $.messager.alert('My Title', 'Here is a warning message!',
+		                            'warning');
+		        }
+		    </script>
+		    
+		    <h2>Interactive Messager</h2>
+			<p>Click on each button to display interactive message box.</p>
+			<div style="margin: 20px 0;">
+				<a href="#" class="easyui-linkbutton" onclick="confirm1();">Confirm</a>
+				<a href="#" class="easyui-linkbutton" onclick="prompt1()">Prompt</a>
+			</div>
+			<script>
+		        function confirm1() {
+		            $.messager.confirm('My Title', 'Are you confirm this?',
+		                            function(r) {
+		                                if (r) {
+		                                    alert('confirmed: ' + r);
+		                                }
+		                            });
+		        }
+		        function prompt1() {
+		            $.messager.prompt('My Title', 'Please type something', function(r) {
+		                if (r) {
+		                    alert('you type: ' + r);
+		                }
+		            });
+		        }
+		    </script>
+		    
+	
+</body>
+</html>
