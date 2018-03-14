@@ -105,7 +105,7 @@ public class StandardAction extends ActionSupport implements ModelDriven<Standar
         //将集合转换为json数据
         String json = JSONArray.fromObject(list).toString();
         
-        //写出到页面
+        //写出到页面 
         HttpServletResponse response = ServletActionContext.getResponse();
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(json);

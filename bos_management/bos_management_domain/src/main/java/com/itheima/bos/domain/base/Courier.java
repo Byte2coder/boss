@@ -53,6 +53,8 @@ public class Courier {
     private TakeTime takeTime;
 
     @ManyToMany(mappedBy = "couriers")
+    //只有集合属性发生懒加载
+    //增加transient关键字,不用
     private Set<FixedArea> fixedAreas = new HashSet<FixedArea>();
 
     public Long getId() {
