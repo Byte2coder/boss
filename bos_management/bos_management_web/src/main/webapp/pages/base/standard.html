@@ -50,7 +50,17 @@
 				text : '修改',
 				iconCls : 'icon-edit',
 				handler : function(){
-					
+					//判断用户勾选
+					var result = $("#grid").datagrid("getSelections");
+					if(result.length==1){
+					  //一条数据,可以修改					  
+					  //打开窗口
+					  $("#standardWindow").window("open");
+					  $('#standardForm').form('load',result[0]);
+
+					}else{
+						$.messager.alert('警告','你必须只能选择一条数据修改','info');   
+					}
 				
 				}
 			},{
