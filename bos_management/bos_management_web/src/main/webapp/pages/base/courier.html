@@ -18,6 +18,7 @@
 		<script type="text/javascript">
 			function doAdd(){
 				$('#addWindow').window("open");
+				
 			}
 			
 			function doEdit(){
@@ -165,6 +166,18 @@
 			}
 		</script>
 	</head>
+	<script type="text/javascript">
+	   function submitData(){
+		
+		  var result=   $("#courierForm").form("validate");
+	      if (result) {
+	    	  $("#courierForm").submit();
+		   }
+	   
+	   
+	   }
+	
+	</script>
 
 	<body class="easyui-layout" style="visibility:hidden;">
 		<div region="center" border="false">
@@ -173,12 +186,12 @@
 		<div class="easyui-window" title="对收派员进行添加或者修改" id="addWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 			<div region="north" style="height:31px;overflow:hidden;" split="false" border="false">
 				<div class="datagrid-toolbar">
-					<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
+					<a id="save" onclick="submitData()" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
 				</div>
 			</div>
 
 			<div region="center" style="overflow:auto;padding:5px;" border="false">
-				<form>
+				<form id="courierForm" method="post" action="../../courierAction_save.action">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="4">收派员信息</td>
@@ -223,7 +236,7 @@
 								<input type="text" name="standard.id" 
 										class="easyui-combobox" 
 										data-options="required:true,valueField:'id',textField:'name',
-											url:'../../standard_findAll.action'"/>
+											url:'../../standardAction_findAll.action'"/>
 							</td>
 						</tr>
 						<tr>
