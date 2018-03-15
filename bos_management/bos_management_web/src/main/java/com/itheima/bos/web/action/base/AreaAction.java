@@ -30,6 +30,7 @@ import org.springframework.stereotype.Controller;
 import com.itheima.bos.domain.base.Area;
 import com.itheima.bos.domain.base.Standard;
 import com.itheima.bos.service.base.AreaService;
+import com.itheima.bos.web.action.CommonAction;
 import com.itheima.utils.PinYin4jUtils;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -46,17 +47,18 @@ import net.sf.json.JsonConfig;
 @ParentPackage("struts-default")
 @Scope("prototype")
 @Controller
-public class AreaAction extends ActionSupport implements ModelDriven<Area>{
+public class AreaAction extends CommonAction<Area>{
+  
+    //既是无参,又可以调用父类的构造函数
+    public AreaAction() {
+        super(Area.class);  
+    }
 
-    private Area model=new Area();
-    
+
     @Autowired
     private AreaService areaService;
     
-    @Override
-    public Area getModel() {  
-        return model;
-    }
+    
 
     //先使用属性驱动获取上传文件
     private File file;
@@ -124,16 +126,7 @@ public class AreaAction extends ActionSupport implements ModelDriven<Area>{
     }
     
     
-    //使用属性驱动获取数据
-    private int page;
-    private int rows;
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
+   
     
     // AJAX请求不需要跳转页面
     @Action(value = "areaAction_pageQuery")
@@ -144,24 +137,12 @@ public class AreaAction extends ActionSupport implements ModelDriven<Area>{
         Pageable pageable=new PageRequest(page-1, rows);
         Page<Area> page= areaService.findAll(pageable);
          //总数据条数
-        long total = page.getTotalElements();
-        //当前页面要实现的内容
-        List<Area> list = page.getContent();
-        
-        Map<String ,Object> map=new HashMap<String, Object>();
-        
-        map.put("total", total);
-        map.put("rows", list);
         
         JsonConfig jsonConfig=new JsonConfig();
         jsonConfig.setExcludes(new String[]{"subareas"});
-        //转换数据为json
-        String json = JSONObject.fromObject(map,jsonConfig).toString();
         
-        HttpServletResponse response = ServletActionContext.getResponse();
+        page2json(page, jsonConfig);
         
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(json);
         
         return NONE;
     }

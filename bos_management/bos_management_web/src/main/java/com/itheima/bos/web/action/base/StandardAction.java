@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 
 import com.itheima.bos.domain.base.Standard;
 import com.itheima.bos.service.base.StandardService;
+import com.itheima.bos.web.action.CommonAction;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -37,38 +38,27 @@ import net.sf.json.JSONObject;
 @Scope("prototype")
 @Namespace("/")
 @ParentPackage("struts-default")
-public class StandardAction extends ActionSupport implements ModelDriven<Standard> {
+public class StandardAction extends CommonAction<Standard> {
+    public StandardAction() {
+        super(Standard.class);  
+    }
 
-    private Standard model = new Standard();
 
     @Autowired
     private StandardService standardService;
 
-    @Override
-    public Standard getModel() {
-
-        return model;
-    }
+   
 
     @Action(value = "standardAction_save", results = {
             @Result(name = "success", location = "/pages/base/standard.html", type = "redirect")})
     public String save() {
-        standardService.save(model);
+        standardService.save(getModel());
 
         return SUCCESS;
     }
     
     
-    //使用属性驱动获取数据
-    private int page;
-    private int rows;
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
+    
     
     // AJAX请求不需要跳转页面
     @Action(value = "standardAction_pageQuery")
@@ -78,23 +68,9 @@ public class StandardAction extends ActionSupport implements ModelDriven<Standar
         // 所以要-1
         Pageable pageable=new PageRequest(page-1, rows);
         Page<Standard> page= standardService.findAll(pageable);
-         //总数据条数
-        long total = page.getTotalElements();
-        //当前页面要实现的内容
-        List<Standard> list = page.getContent();
         
-        Map<String ,Object> map=new HashMap<String, Object>();
-        
-        map.put("total", total);
-        map.put("rows", list);
-        //转换数据为json
-        String json = JSONObject.fromObject(map).toString();
-        
-        HttpServletResponse response = ServletActionContext.getResponse();
-        
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(json);
-        
+        page2json(page, null);
+
         return NONE;
     }
     @Action(value = "standardAction_findAll")
