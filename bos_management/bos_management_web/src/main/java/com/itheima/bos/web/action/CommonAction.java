@@ -31,18 +31,19 @@ public class CommonAction<T> extends ActionSupport implements ModelDriven<T> {
     private Class<T> clazz;
     
     public CommonAction(Class<T> clazz ) {
+        try {
+            model = clazz.newInstance();//*1
+        } catch (Exception e) {
+            e.printStackTrace();          
+        }
         this.clazz=clazz;
     }
 
+    //*1放在下面方法时,如果方法在调用时会发生两次实例化,第一次会传入数据,
+       //但是调用getModel方法时会重新实例化导致结果没有数据
+    //解决方法1.是进行判断2.或者将实例化放在构造函数中
     @Override
     public T getModel() {
-          try {
-            model = clazz.newInstance();
-        } catch (Exception e) {
-              
-            e.printStackTrace();  
-            
-        }
           
         return model;
     }

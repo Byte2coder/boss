@@ -78,14 +78,15 @@ public class StandardAction extends CommonAction<Standard> {
         Page<Standard> page = standardService.findAll(null);
        //直接获取数据
         List<Standard> list = page.getContent();
-        //将集合转换为json数据
+       /* //将集合转换为json数据
         String json = JSONArray.fromObject(list).toString();
         
         //写出到页面 
         HttpServletResponse response = ServletActionContext.getResponse();
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(json);
-        
+        */
+        list2json(list, null);
         return NONE;
     }
 }
