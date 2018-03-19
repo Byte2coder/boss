@@ -1,7 +1,11 @@
 package com.itheima.bos.web.action.base;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -13,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
+import com.itheima.bos.domain.base.Customer;
 import com.itheima.bos.domain.base.FixedArea;
 import com.itheima.bos.service.base.FixedAreaService;
 import com.itheima.bos.web.action.CommonAction;
@@ -60,5 +65,36 @@ public class FixedAreaAction extends CommonAction<FixedArea> {
         return NONE;
     }
     
+    //向CRM系统发起请求,查询未关联的客户
+    @Action(value="fixedAreaAction_findUnAssociatedCustomers")
+    public String findUnAssociatedCustomers() throws IOException{
+        List<Customer> list= 
+                (List<Customer>) WebClient.create("http://localhost:8180/crm/webService/customerService/findCustomersUnAssociated")
+             .accept(MediaType.APPLICATION_JSON)
+             .type(MediaType.APPLICATION_JSON)
+             .getCollection(Customer.class);
+        list2json(list, null);
+        return NONE;
+    }
+    
+    //向CRM系统发起请求,查询定区关联的客户
+    @Action(value="fixedAreaAction_findAssociatedCustomers")
+    public String findAssociatedCustomers() throws IOException{
+        
+       List<Customer> list= (List<Customer>) WebClient.create("http://localhost:8180/crm/webService/customerService/findCustomersAssociated2FixedArea")
+              .query("fixedAreaId", getModel().getId())
+              .accept(MediaType.APPLICATION_JSON)
+              .type(MediaType.APPLICATION_JSON)
+              .getCollection(Customer.class);
+        list2json(list, null);
+        return NONE;
+    }
+    //fixedAreaAction_assignCustomers2FixedArea
+    @Action(value="fixedAreaAction_assignCustomers2FixedArea",
+            results={@Result(name="success",location="/pages/base/fixed_area.html",type="redirect")})
+    public String assignCustomers2FixedArea() throws IOException{
+        
+        return SUCCESS;
+    }
 }
   
