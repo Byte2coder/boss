@@ -260,6 +260,15 @@
 		</script>
 	</head>
 
+     <script type="text/javascript">
+        function submitData(){
+        	var result=$("#fixedAreaForm").form("validate");
+        	if(result){
+        		$("#fixedAreaForm").submit();
+        	}
+        	
+        }
+     </script>
 	<body class="easyui-layout" style="visibility:hidden;">
 		<div region="center" border="false">
 			<table id="grid"></table>
@@ -279,7 +288,7 @@
 		<div class="easyui-window" title="定区添加修改" id="addWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 			<div style="height:31px;overflow:hidden;" split="false" border="false">
 				<div class="datagrid-toolbar">
-					<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
+					<a id="save" onclick="submitData()" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
 					</script>
 				</div>
 			</div>

@@ -25,7 +25,6 @@ public class FixedArea {
 
     @Id
     @Column(name = "C_ID")
-    @GeneratedValue
     private Long id; // 主键
     @Column(name = "C_FIXED_AREA_NAME", unique = true)
     private String fixedAreaName; // 定区名称
