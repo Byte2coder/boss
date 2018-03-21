@@ -89,12 +89,54 @@ public class FixedAreaAction extends CommonAction<FixedArea> {
         list2json(list, null);
         return NONE;
     }
-    //fixedAreaAction_assignCustomers2FixedArea
+    
+    //使用属性驱动获取要关联到指定定区的客户ID
+    private Long[] customerIds;
+    
+    public void setCustomerIds(Long[] customerIds) {
+        this.customerIds = customerIds;
+    }
+    
+     
+    
+    //关联快递员
     @Action(value="fixedAreaAction_assignCustomers2FixedArea",
             results={@Result(name="success",location="/pages/base/fixed_area.html",type="redirect")})
     public String assignCustomers2FixedArea() throws IOException{
+        WebClient.create("http://localhost:8180/crm/webService/customerService/assignCustomers2FixedArea")
+                  .query("customerIds", customerIds)
+                  .query("fixedAreaId", getModel().getId())
+                  .accept(MediaType.APPLICATION_JSON)
+                  .type(MediaType.APPLICATION_JSON)
+                  .put(null);
         
         return SUCCESS;
     }
+   
+    
+    //使用属性驱动获取快递员和时间的ID
+    private Long courierId;
+    private Long takeTimeId;
+    public void setCourierId(Long courierId) {
+        this.courierId = courierId;
+    }
+    
+    public void setTakeTimeId(Long takeTimeId) {
+        this.takeTimeId = takeTimeId;
+    }
+
+    
+    //关联快递员
+     //fixedAreaAction_associationCourierToFixedArea.action
+    @Action(value="fixedAreaAction_associationCourierToFixedArea",results={@Result(
+            name="success",location="/pages/base/fixed_area.html",type="redirect")})
+    public String associationCourierToFixedArea(){
+        fixedAreaService.associationCourierToFixedArea(courierId,takeTimeId,getModel().getId());
+        
+        return SUCCESS;
+    }
+    
+    
+    
 }
   

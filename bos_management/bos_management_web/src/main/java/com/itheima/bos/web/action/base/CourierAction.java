@@ -30,6 +30,7 @@ import org.springframework.stereotype.Controller;
 import com.itheima.bos.domain.base.Courier;
 import com.itheima.bos.domain.base.Standard;
 import com.itheima.bos.service.base.CourierService;
+import com.itheima.bos.web.action.CommonAction;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -45,35 +46,24 @@ import net.sf.json.JsonConfig;
 @Namespace("/")
 @Scope("prototype")
 @ParentPackage(value = "struts-default")
-public class CourierAction extends ActionSupport implements ModelDriven<Courier> {
+public class CourierAction extends CommonAction<Courier> {
 
-    private Courier model = new Courier();
+    public CourierAction() {
+        super(Courier.class);  
+    }
 
     @Autowired
     private CourierService courierService;
 
-    @Override
-    public Courier getModel() {
-
-        return model;
-    }
-
+   
     @Action(value = "courierAction_save", results = {
             @Result(name = "success", location = "/pages/base/courier.html", type = "redirect")})
     public String save() {
-        courierService.save(model);
+        courierService.save(getModel());
         return SUCCESS;
     }
     
-    private int page;
-    private int rows;
-    public void setPage(int page) {
-        this.page = page;
-    }
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
+    
     @Action(value = "courierAction_pageQuery") 
     public String pageQuery() throws IOException {
 
@@ -88,11 +78,10 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
             */
         @Override
         public Predicate toPredicate(Root<Courier> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-            String courierNum = model.getCourierNum();
-            Standard standard = model.getStandard();
-            String type = model.getType();
-            String company = model.getCompany();
-            
+            String courierNum = getModel().getCourierNum();
+            Standard standard = getModel().getStandard();
+            String type = getModel().getType();
+            String company = getModel().getCompany();
             List<Predicate> list=new ArrayList<Predicate>();
             if (StringUtils.isNotEmpty(courierNum)) {
                 //工号不为空,构建一个等值查询条件
@@ -101,7 +90,6 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
                 Predicate p1 = cb.equal(root.get("courierNum").as(String.class), courierNum);
                 list.add(p1);
             }
-            
             if (StringUtils.isNotEmpty(type)) {
                 //类型不为空,构建一个等值查询条件
                 //x...
@@ -109,7 +97,6 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
                 Predicate p2 = cb.equal(root.get("type").as(String.class), type);
                 list.add(p2);
             }
-            
             if (StringUtils.isNotEmpty(company)) {
                 //公司不为空,构建一个模糊查询条件
                 //x...
@@ -117,7 +104,6 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
                 Predicate p3 = cb.like(root.get("company").as(String.class), "%"+company+"%");
                 list.add(p3);
             }
-            
             if (standard!=null) {
                 String name = standard.getName();
                 
@@ -131,7 +117,6 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
             //用户没有输入查询条件
             if (list.size()==0) {
                 return null;
-                
             }
             //用户输入查询条件
             Predicate[] arr=new Predicate[list.size()];
@@ -139,33 +124,15 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
             list.toArray(arr);
             //用户输入多少条件,就让多少条件同时满足
             Predicate predicate = cb.and(arr);
-            
             return predicate;
-        
     } }; 
-    
       Pageable pageable=new PageRequest(page-1, rows);
       Page<Courier> page= courierService.findAll(specification,pageable);
-        
-      long total = page.getTotalElements();
-      List<Courier> content = page.getContent();
-      //封装数据
-      Map<String, Object> map=new HashMap<String, Object>();
-      
-      map.put("total", total);
-      map.put("rows", content);
-      
       //灵活控制输出的字段
       JsonConfig jsonConfig=new JsonConfig();
       jsonConfig.setExcludes(new String[]{"fixedAreas","takeTime"});
-      //转换成json数组
-      //实际开发的时候,为了提高计算机的性能,把前台不需要的数据
-      String json = JSONObject.fromObject(map,jsonConfig).toString();
       
-      HttpServletResponse response = ServletActionContext.getResponse();
-      response.setContentType("application/json;charset=utf-8");
-      response.getWriter().write(json);
-      
+       page2json(page, jsonConfig);
         return NONE;
     }
 
@@ -182,6 +149,47 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
        
         courierService.batchDel(ids);
         return SUCCESS;
+    }
+    
+    //courierAction_listajax
+    @Action(value = "courierAction_listajax") 
+    public String listajax() throws IOException {
+        //查询在职快递员
+     
+       List<Courier> list = courierService.findAvaible();
+       
+       JsonConfig jsonConfig=new JsonConfig();
+       jsonConfig.setExcludes(new String[]{"fixedAreas","takeTime"});
+       
+       list2json(list, jsonConfig);
+        return NONE;
+    }
+    
+    
+    @Action(value = "courierAction_listajax22") 
+    public String listajax22() throws IOException {
+        //查询在职快递员
+        
+        Specification<Courier> specification =new Specification<Courier>(){
+            
+            @Override
+            public Predicate toPredicate(Root<Courier> root, CriteriaQuery<?> query,
+                    CriteriaBuilder cb) {
+                
+                Predicate predicate = cb.isNull(root.get("deltag").as(Character.class));
+                return predicate;
+            }
+        };
+        
+        
+        Page<Courier> page=courierService.findAll(specification , null);
+        List<Courier> list = page.getContent();
+        
+        JsonConfig jsonConfig=new JsonConfig();
+        jsonConfig.setExcludes(new String[]{"fixedAreas","takeTime"});
+        
+        list2json(list, jsonConfig);
+        return NONE;
     }
     
 }

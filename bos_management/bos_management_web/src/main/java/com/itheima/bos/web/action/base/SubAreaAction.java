@@ -57,9 +57,9 @@ public class SubAreaAction extends CommonAction<SubArea> {
         // 所以要-1
        Pageable pageable=new PageRequest(page-1, rows);
        Page<SubArea> page= subAreaService.findAll(pageable);
-         
+       
        JsonConfig jsonConfig=new JsonConfig();
-       jsonConfig.setExcludes(new String[]{"fixedArea",""});
+       jsonConfig.setExcludes(new String[]{"subareas"});
        
         page2json(page, jsonConfig);
         
