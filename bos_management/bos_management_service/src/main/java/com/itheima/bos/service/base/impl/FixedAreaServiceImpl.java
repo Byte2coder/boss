@@ -1,6 +1,7 @@
 package com.itheima.bos.service.base.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.itheima.bos.dao.base.CourierRepository;
 import com.itheima.bos.dao.base.FixedAreaRepository;
+import com.itheima.bos.dao.base.SubAreaRepository;
 import com.itheima.bos.dao.base.TakeTimeRepository;
 import com.itheima.bos.domain.base.Area;
 import com.itheima.bos.domain.base.Courier;
 import com.itheima.bos.domain.base.FixedArea;
+import com.itheima.bos.domain.base.SubArea;
 import com.itheima.bos.domain.base.TakeTime;
 import com.itheima.bos.service.base.AreaService;
 import com.itheima.bos.service.base.FixedAreaService;
@@ -29,12 +32,15 @@ public class FixedAreaServiceImpl implements  FixedAreaService {
 
     @Autowired
     private FixedAreaRepository fixedAreaRepository;
+    
     @Autowired
     private CourierRepository courierRepository;
     
     @Autowired
     private TakeTimeRepository takeTimeRepository;
     
+    @Autowired
+    private SubAreaRepository subAreaRepository;
     
     @Override
     public void save(FixedArea model) {
@@ -61,6 +67,27 @@ public class FixedAreaServiceImpl implements  FixedAreaService {
     
        //定区关联快递员
        fixedArea.getCouriers().add(courier);
+    }
+    
+    //关联分区到指定的分区
+    @Override
+    public void assignSubAreas2FixedArea(Long fixedAreaId, Long[] subAreaIds) {
+        //先将所有的分区解绑
+        //查询出的持久态对象
+        FixedArea fixedArea = fixedAreaRepository.findOne(fixedAreaId);
+        Set<SubArea> subareas = fixedArea.getSubareas();
+       //解绑操作,subArea负责维护外键,subArea负责解绑
+        for (SubArea subArea : subareas) {
+        subArea.setFixedArea(null);
+      }
+        
+        //再将选中的分区关联到指定的定区
+        for (Long subAreaId : subAreaIds) {
+            SubArea subArea = subAreaRepository.findOne(subAreaId);
+            subArea.setFixedArea(fixedArea);
+        }
+        
+        
     }
 
   

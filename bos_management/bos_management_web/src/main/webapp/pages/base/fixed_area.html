@@ -644,6 +644,7 @@
         function moveSubArea2Left(){
         	$("#noassociationSubAreaSelect").append($("#associationSubAreaSelect option:selected"));
         }
+        //提交表单执行关联操作
         function subArea2FixedArea(){
         	
         	//给定区赋值
@@ -652,7 +653,7 @@
         	//选中右侧下拉框中所有数据
         	$("#associationSubAreaSelect option").prop("selected","selected");
         	
-    		 $("#subAreaWindow").submit();
+    		 $("#subAreaForm").submit();
     	   
         }
     </script>
