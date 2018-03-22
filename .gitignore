@@ -3,3 +3,5 @@
 .classpath
 target
 demo
+/bos_management/bos_management_web/mylog.log
+/bos_management/bos_management_web/src/test/java/com/itheima/bos/dao/test/StandardRepositoryTest.java

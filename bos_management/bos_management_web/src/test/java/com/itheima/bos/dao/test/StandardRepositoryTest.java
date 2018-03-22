@@ -20,13 +20,13 @@ import com.itheima.bos.domain.base.Standard;
  * Date:     2018年3月12日 下午8:59:29 <br/>       
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:applicationContext.xml")
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration("classpath:applicationContext.xml")
 public class StandardRepositoryTest {
 
     @Autowired
     private StandardRepository standardRepository;
-    @Test
+    //@Test
     public void test() {
         List<Standard> list = standardRepository.findAll();
         for (Standard standard : list) {
@@ -34,7 +34,7 @@ public class StandardRepositoryTest {
         }
     }
     //保存
-    @Test
+    //@Test
     public void test02() {
         Standard standard=new Standard();
         standard.setName("和平平");
@@ -43,7 +43,7 @@ public class StandardRepositoryTest {
         
     }
     //更新-save
-    @Test
+    //@Test
     public void test03() {
         Standard standard=new Standard();
         standard.setId(2L);
@@ -52,7 +52,7 @@ public class StandardRepositoryTest {
         
     }
     //查询--id
-    @Test
+    //@Test
     public void test04() {
         
         Standard standard = standardRepository.findOne(2L);
@@ -60,21 +60,21 @@ public class StandardRepositoryTest {
         
     }
     //删除
-    @Test
+    //@Test
     public void test05() {
         
         standardRepository.delete(2L);
         
     }
     //自定义查找name
-    @Test
+    //@Test
     public void test06() {
         
          List<Standard> list = standardRepository.findByName("和平");
       System.out.println(list.get(0));  
     }
     //模糊查询
-    @Test
+    //@Test
     public void test07() {
         
       List<Standard> list = standardRepository.findByNameLike("%和%");
@@ -83,7 +83,7 @@ public class StandardRepositoryTest {
           System.out.println(standard);
         }
     }
-    @Test
+    //@Test
     public void test08() {
         
         List<Standard> list = standardRepository.findByNameAndMaxWeight("和平", 1000);
@@ -94,7 +94,7 @@ public class StandardRepositoryTest {
     }
     
     
-    @Test
+    //@Test
     public void test09() {
         
         List<Standard> list = standardRepository.findByNameAndMaxWeight469979("和平", 1000);
@@ -103,7 +103,7 @@ public class StandardRepositoryTest {
             System.out.println(standard);
         }
     }
-    @Test
+   // @Test
     public void test10() {
         
         List<Standard> list = standardRepository.findByNameAndMaxWeight469979( 1000,"和平");
@@ -114,7 +114,7 @@ public class StandardRepositoryTest {
     }
     
     //原生SQL
-    @Test
+   // @Test
     public void test11() {
         
         List<Standard> list = standardRepository.findByNameAndMaxWeight469979ppp( "和平",1000);
@@ -129,14 +129,14 @@ public class StandardRepositoryTest {
     //@Transactional
     //在测试用例中使用事务,修改方法会执行,但是又回滚了,
     //最终不会修改数据,需要将@Transactional加到定义方法的地方
-    @Test
+   // @Test
     public void test12() {
         
        standardRepository.updateWeightByName(999, "和平");
     }
     
     //删除操作
-    @Test
+    //@Test
     public void test13() {
         
       standardRepository.deleteByName("和平");

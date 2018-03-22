@@ -8,6 +8,7 @@ import java.util.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,6 +16,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.itheima.crm.domain.Customer;
+
+import net.sf.jasperreports.web.actions.SaveAction;
 
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
@@ -43,5 +46,31 @@ public interface CustomerService {
      @Path("/assignCustomers2FixedArea")
      void assignCustomers2FixedArea(@QueryParam("fixedAreaId") String fixedAreaId,@QueryParam("customerIds") Long[] customerIds);
      
+     
+     //保存用户
+     @POST
+     @Path("/save")
+     void Save(Customer customer);
+     
+     @GET
+     @Path("/findByTelephone")
+     Customer findByTelephone(@QueryParam("telephone") String telephone);
+     
+     
+     //激活验证码
+     @PUT
+     @Path("/active")
+     void active(@QueryParam("telephone")  String telephone);
+
+     //是否激活
+     @GET
+     @Path("/isActived")
+     Customer isActived(@QueryParam("telephone")  String telephone);
+
+     //登录
+     @GET
+     @Path("/login")
+     Customer login(@QueryParam("telephone")  String telephone,@QueryParam("password") String password);
+
 }
   
