@@ -38,8 +38,43 @@
 		$('#searchWindow').window("open");
 	}
 
-	function doAssociations() {
-		$('#customerWindow').window('open');
+	//关联分区
+	function doSubAreaAssociations() {
+		var rows = $("#grid").datagrid("getSelections");
+		if (rows.length == 1) {
+			$('#subAreaWindow').window('open');
+			//清空节点中的数据
+			// $("#noassociationSelect").html("");
+			$("#noassociationSubAreaSelect").empty();
+			$("#associationSubAreaSelect").empty();
+			//发起请求查询未关联的
+			$.post("../../subAreaAction_findUnAssociatedSubAreas.action",
+					function(data) {
+						for (var i = 0; i < data.length; i++) {
+							var id = data[i].id;
+							var keyWords = data[i].keyWords;
+							$("#noassociationSubAreaSelect").append(
+									"<option value='"+id+"'>" + keyWords +  "</option>")
+						}
+
+					})
+		
+		    var id=rows[0].id;
+			//发起请求查询已关联到当前定区的分区
+			$.post("../../subAreaAction_findAssociatedSubAreas.action","id="+id,
+					function(data) {
+						for (var i = 0; i < data.length; i++) {
+							var id = data[i].id;
+							var keyWords = data[i].keyWords;
+							$("#associationSubAreaSelect").append(
+									"<option value='"+id+"'>" + keyWords + "</option>")
+						}
+
+					})
+		} else {
+			$.messager.alert("提示", "能且只能选择一条数据", "info");
+		}
+
 	}
 
 	//关联客户
@@ -132,7 +167,7 @@
 		id : 'button-association2',
 		text : '关联分区',
 		iconCls : 'icon-sum',
-		handler : doAssociations
+		handler : doSubAreaAssociations
 	} ];
 	// 定义列
 	var columns = [ [ {
@@ -559,6 +594,70 @@
 	 }
 	
 	</script>
+	
+	<!-- 关联分区窗口 -->
+	<div modal="true" class="easyui-window" title="关联分区窗口"
+		id="subAreaWindow" collapsible="false" closed="true"
+		minimizable="false" maximizable="false"
+		style="top: 20px; left: 200px; width: 400px; height: 300px;">
+		<div style="overflow: auto; padding: 5px;" border="false">
+			<form id="subAreaForm"
+				action="../../fixedAreaAction_assignSubAreas2FixedArea.action"
+				method="post">
+				<table class="table-edit" width="80%" align="center">
+					<tr class="title">
+						<td colspan="3">关联分区</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="hidden" name="id" id="subAreaFixedAreaId" />
+							<select id="noassociationSubAreaSelect" multiple="multiple" size="10">
+							</select>
+						</td>
+						<td>
+							<input type="button" value="》》" onclick="moveSubArea2Right()" id="toRight">
+							<br />
+							<input type="button" value="《《" onclick="moveSubArea2Left()" id="toLeft">
+						</td>
+						<td>
+							<select id="associationSubAreaSelect" name="subAreaIds"
+								multiple="multiple" size="10">
+
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<a id="subAreaBtn" href="#" class="easyui-linkbutton"
+							onclick="subArea2FixedArea()"	data-options="iconCls:'icon-save'">关联分区</a>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+
+    <script type="text/javascript">
+        function moveSubArea2Right(){
+        	$("#associationSubAreaSelect").append($("#noassociationSubAreaSelect option:selected"));
+        }
+        function moveSubArea2Left(){
+        	$("#noassociationSubAreaSelect").append($("#associationSubAreaSelect option:selected"));
+        }
+        function subArea2FixedArea(){
+        	
+        	//给定区赋值
+        	var rows=$("#grid").datagrid("getSelections")
+    	    $("#subAreaFixedAreaId").val(rows[0].id);
+        	//选中右侧下拉框中所有数据
+        	$("#associationSubAreaSelect option").prop("selected","selected");
+        	
+    		 $("#subAreaWindow").submit();
+    	   
+        }
+    </script>
+	
+	
 </body>
 
 </html>

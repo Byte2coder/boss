@@ -1,6 +1,7 @@
 package com.itheima.bos.web.action.base;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -66,6 +67,26 @@ public class SubAreaAction extends CommonAction<SubArea> {
         return NONE;
     }
     
+    //查询已关联指定定区的分区
+    @Action("subAreaAction_findAssociatedSubAreas")
+    public String findAssociatedSubAreas() throws IOException{
+        List<SubArea> list=subAreaService.findAssociatedSubAreas(getModel().getId());
+        JsonConfig jsonConfig=new JsonConfig();
+        jsonConfig.setExcludes(new String[]{"subareas","couriers"});
+        list2json(list, jsonConfig);
+        
+        return NONE;
+    }
+    
+    //查询未关联定区的分区
+    @Action("subAreaAction_findUnAssociatedSubAreas")
+    public String findUnAssociatedSubAreas() throws IOException{
+        List<SubArea> list=subAreaService.findUnAssociatedSubAreas();
+        JsonConfig jsonConfig=new JsonConfig();
+        jsonConfig.setExcludes(new String[]{"subareas"});
+         list2json(list, jsonConfig);
+        return NONE;
+    }
 
 }
   
