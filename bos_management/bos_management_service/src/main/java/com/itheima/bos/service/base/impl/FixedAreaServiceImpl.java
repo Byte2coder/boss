@@ -67,6 +67,8 @@ public class FixedAreaServiceImpl implements  FixedAreaService {
     
        //定区关联快递员
        fixedArea.getCouriers().add(courier);
+        
+      // fixedAreaRepository.updateBoth(courierId, fixedAreaId);
     }
     
     //关联分区到指定的分区
