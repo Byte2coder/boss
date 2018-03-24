@@ -9,6 +9,15 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <!-- 配置webService -->
+  <servlet>
+     <servlet-name>cxf</servlet-name>
+     <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>cxf</servlet-name>
+      <url-pattern>/webService/*</url-pattern>
+  </servlet-mapping>
   
   <context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -23,6 +32,8 @@
 		<filter-name>struts</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
 	</filter>
+	<!-- 如果struts拦截的规则是/*,要改为*.action
+	 不然会起冲突 -->
 	<filter-mapping>
 		<filter-name>struts</filter-name>
 		<url-pattern>*.action</url-pattern>

@@ -72,5 +72,11 @@ public interface CustomerService {
      @Path("/login")
      Customer login(@QueryParam("telephone")  String telephone,@QueryParam("password") String password);
 
+     //根据地址查询定区ID
+     @GET
+     @Path("/findFixedAreaIdByAddress")
+     String findFixedAreaIdByAddress(@QueryParam("address") String address);
+
+
 }
   
