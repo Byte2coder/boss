@@ -151,8 +151,13 @@
 					columns : columns,
 					onDblClickRow : doDblClickRow,
 					onAfterEdit : function(rowIndex, rowData, changes){
-						console.info(rowData);
-						editIndex = undefined;
+						$.post("../../wayBillAction_save.action",rowData,
+								function(data){
+							      if (data=="1") {
+									$.messager.alert("提示", "数据录入失败", "info", fn)
+								}
+						      })
+						
 					}
 				});
 			});
