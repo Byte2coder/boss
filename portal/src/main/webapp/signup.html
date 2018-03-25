@@ -47,14 +47,16 @@
 									    <script type="text/javascript">
 									        function checkTelephone(obj) {
 									        	//alert(obj.value)
-									        	if(obj.value!=null){
-												    $.post("customerAction_checkTelephone.action","telephone="+obj.value,function(data){
-												    	if (data.equals("true")) {
-															alert("该用户已被注册")
-														}
-												    	if (data.equals("false")) {
-															alert("该用户可以注册")
-														}
+									        	var inputTele=obj.value;
+									        	if(inputTele!=null){
+												    $.post("customerAction_checkTelephone.action","telephone="+inputTele,function(data){
+												    	if ("true"==data) {
+															$("#spanId").val("该用户已被注册")
+														    console.log("该用户已被注册")
+												    	}
+												    	
+															//alert("该用户可以注册")
+														
 												})
 									        	}
 											}

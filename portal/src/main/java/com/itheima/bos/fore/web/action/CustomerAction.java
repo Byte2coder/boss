@@ -3,6 +3,10 @@ package com.itheima.bos.fore.web.action;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.Session;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -16,6 +20,8 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Controller;
 
 import com.aliyuncs.exceptions.ClientException;
@@ -37,6 +43,9 @@ import com.opensymphony.xwork2.ModelDriven;
 public class CustomerAction extends ActionSupport implements ModelDriven<Customer> {
 
     private Customer model = new Customer();
+    
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     @Override
     public Customer getModel() {
@@ -44,15 +53,23 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
     }
 
     @Action("customerAction_sendSMS")
-    public String sendSMS() throws Exception {
+    public String sendSMS()  {
 
         // 随机生成验证码
-        String code = RandomStringUtils.randomNumeric(6);
+        final String code = RandomStringUtils.randomNumeric(6);
         System.out.println(code);
         ServletActionContext.getRequest().getSession().setAttribute("serverCode", code);
-        String telephone = model.getTelephone();
-        SmsUtils.sendSms(telephone, code);
-
+        
+        jmsTemplate.send("sms", new MessageCreator() {
+            
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                MapMessage mapMessage = session.createMapMessage();
+                mapMessage.setString("tel", model.getTelephone());
+                mapMessage.setString("code", code);
+                return mapMessage;
+            }
+        });
         return NONE;
     }
     
@@ -63,9 +80,8 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
     }
     
     //customerAction_checkTelephone
-    @Action(value="customerAction_checkTelephone",results={
-            @Result(name="success",location="/signup.html",type="redirect"),
-            @Result(name="error",location="/signup.html",type="redirect")})
+    @Action(value="customerAction_checkTelephone")
+            
     public String checkTelephone() throws IOException{
         
         if (StringUtils.isNotEmpty(telephone)) {
@@ -76,15 +92,17 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
                     .type(MediaType.APPLICATION_JSON)
                     .query("telephone", telephone)
                     .get(Customer.class);
+            boolean doesExist=false;
             if (customer!=null) {
-                ServletActionContext.getResponse().getWriter().write("true");  
-                return ERROR;
+                doesExist=true;
+                ServletActionContext.getResponse().getWriter().write(doesExist+"");  
+               
             }
             
        
         }
-        ServletActionContext.getResponse().getWriter().write("false");  
-        return SUCCESS;
+         
+        return NONE;
         
         
     }
