@@ -29,13 +29,18 @@
 	</listener>
 	<!-- 配置Struts的前端控制器 -->
 	<filter>
+	    
 		<filter-name>struts</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	
 	</filter>
 	<!-- 如果struts拦截的规则是/*,要改为*.action
 	 不然会起冲突 -->
 	<filter-mapping>
 		<filter-name>struts</filter-name>
 		<url-pattern>*.action</url-pattern>
+		
     </filter-mapping>
+    
+   
 </web-app>
