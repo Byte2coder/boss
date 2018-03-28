@@ -29,6 +29,15 @@ public class MenuServiceImpl implements MenuService {
           
         return menuRepository.findByParentMenuIsNull();
     }
+
+
+
+    @Override
+    public void save(Menu menu) {
+          
+        menuRepository.save(menu);
+        
+    }
     
     
     

@@ -13,5 +13,7 @@ public interface MenuService {
     
     List<Menu> findLevelOne();
 
+    void save(Menu model);
+
 }
   
