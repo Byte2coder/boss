@@ -56,7 +56,8 @@ public class UserRealm extends AuthorizingRealm {
         User user = userRepository.findByUsername(username);
         // 查找得到
         if (user != null) {
-            //
+            // 找到--比对密码
+            // 成功
             Object principal = user;
             Object credentials = user.getPassword();
             String realmName = getName();
@@ -66,12 +67,8 @@ public class UserRealm extends AuthorizingRealm {
             //直接完成代码的比对
             return info;
         }
-
-        // 找到--比对密码
-        // 成功
         // 失败
         // 或者查找不到
-
         return null;
     }
 

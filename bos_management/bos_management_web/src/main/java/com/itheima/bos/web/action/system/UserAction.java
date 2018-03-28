@@ -62,7 +62,7 @@ public class UserAction extends CommonAction<User> {
                     new UsernamePasswordToken(getModel().getUsername(), getModel().getPassword());
             try {
                 subject.login(token);
-                //将用户存到域对象中,返回值有realm中定义
+                // 将用户存到域对象中,返回值有realm中定义
                 User user = (User) subject.getPrincipal();
                 return SUCCESS;
             } catch (IncorrectCredentialsException e) {
@@ -79,6 +79,15 @@ public class UserAction extends CommonAction<User> {
 
         }
 
-        return NONE;
+        return LOGIN;
+    }
+
+    @Action(value = "userAction_logout",
+            results = {@Result(name = "success", location = "/login.html", type = "redirect")})
+    public String logout() {
+
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return SUCCESS;
     }
 }
