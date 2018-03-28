@@ -27,6 +27,28 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<!-- spring 框架提供,整合shiro框架 
+	    写在struts拦截器之上,
+	-->
+	<!-- 2.5的工程filter执行顺序是按照在web.xml中注册的顺序从上往下执行
+	     3.0的工程没有web.xml,其filter执行顺序是按类名的字典顺序
+	  创建顺序;
+	  listener
+	  filter
+	  servlet
+	  在delegatingFilterProxy创建的过程中,依赖了一个对象,这个对象必须在
+	  applicationContext.xml文件中注册,而且注册时声明的id必须
+	  和DelegatingFilterProxy声明的filter-name保持一致
+	  -->
+	<filter>
+	   <filter-name>shiroFilterFactoryBean</filter-name>
+	   <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+	    <filter-name>shiroFilterFactoryBean</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 	<!-- 配置Struts的前端控制器 -->
 	<filter>
 	    
