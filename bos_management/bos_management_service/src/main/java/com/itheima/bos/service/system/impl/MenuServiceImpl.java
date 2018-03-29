@@ -3,6 +3,8 @@ package com.itheima.bos.service.system.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +32,23 @@ public class MenuServiceImpl implements MenuService {
         return menuRepository.findByParentMenuIsNull();
     }
 
-
-
     @Override
     public void save(Menu menu) {
-          
+       //判断用户是否要添加一级菜单,父菜单是否为null
+        Menu parentMenu = menu.getParentMenu();
+        if (parentMenu!=null && parentMenu.getId()==null) {
+            menu.setParentMenu(null);
+        }
+        
         menuRepository.save(menu);
         
+    }
+
+    //分页查询
+    @Override
+    public Page<Menu> findAll(Pageable pageable) {
+          
+        return menuRepository.findAll(pageable);
     }
     
     
