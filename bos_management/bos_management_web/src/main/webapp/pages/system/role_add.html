@@ -35,7 +35,7 @@
 				};
 				
 				$.ajax({
-					url : '../../data/menu.json',
+					url : '../../menuAction_findLevelOne.action',
 					type : 'POST',
 					dataType : 'text',
 					success : function(data) {
@@ -89,15 +89,12 @@
 					</tr>
 					<tr>
 						<td>权限选择</td>
-						<td>
-							<input type="checkbox" name="permissionIds" value="1" /> 添加快递员 
-							<input type="checkbox" name="permissionIds" value="2" /> 快递员列表查询
-							<input type="checkbox" name="permissionIds" value="3" /> 添加区域 
+						<td id="permissionTd">
 						</td>
 					</tr>
 					<tr>
 						<td>菜单授权</td>
-						<td>
+						<td >
 							<ul id="menuTree" class="ztree"></ul>
 						</td>
 					</tr>
@@ -105,5 +102,19 @@
 			</form>
 		</div>
 	</body>
+	<script type="text/javascript">
+	  $(function(){
+		  $.post("../../permissionAction_findAll.action",function(data){
+			 
+			  for (var i= 0; i < data.length; i++) {
+				var id=data[i].id;
+				var name=data[i].name;
+			   $("#permissionTd").append('<input id="'+id+'" type="checkbox" name="permissionIds" value="'+id+'" /><label for="'+id+'">'+name+'</label>');
+			}
+			  
+		  })
+	  })
+	  
+	</script>
 
 </html>

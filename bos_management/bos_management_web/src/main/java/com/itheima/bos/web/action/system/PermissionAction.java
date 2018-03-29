@@ -1,6 +1,7 @@
 package com.itheima.bos.web.action.system;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
 import com.itheima.bos.domain.system.Permission;
+import com.itheima.bos.domain.system.Role;
 import com.itheima.bos.service.system.PermissionService;
 import com.itheima.bos.web.action.CommonAction;
 
@@ -60,4 +62,16 @@ public class PermissionAction extends CommonAction<Permission> {
         return SUCCESS;
     }
 
+    //permissionAction_findAll
+    @Action(value = "permissionAction_findAll")
+    public String findAll() throws IOException {
+
+        Page<Permission> page = permissionService.findAll(null);
+        List<Permission> list = page.getContent();
+        System.out.println(list);
+        JsonConfig jsonConfig = new JsonConfig();
+        jsonConfig.setExcludes(new String[] {"roles"});
+        list2json(list, jsonConfig);
+        return NONE;
+    }
 }
