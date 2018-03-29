@@ -68,7 +68,6 @@ public class PermissionAction extends CommonAction<Permission> {
 
         Page<Permission> page = permissionService.findAll(null);
         List<Permission> list = page.getContent();
-        System.out.println(list);
         JsonConfig jsonConfig = new JsonConfig();
         jsonConfig.setExcludes(new String[] {"roles"});
         list2json(list, jsonConfig);

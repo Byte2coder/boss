@@ -13,6 +13,8 @@ import com.itheima.bos.domain.system.Permission;
  */
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
+    Permission findById(Long permissionId);
+
 
 }
   

@@ -38,18 +38,37 @@ public class RoleAction extends CommonAction<Role> {
 
     @Autowired
     private RoleService roleService;
+
     // roleAction_pageQuery
     @Action(value = "roleAction_pageQuery")
     public String pageQuery() throws IOException {
 
-        Pageable pageable=new PageRequest(page-1, rows);
-        Page<Role> page=roleService.findALL(pageable);
-        JsonConfig jsonConfig=new JsonConfig();
-        jsonConfig.setExcludes(new String[]{"users","permissions","menus"});
+        Pageable pageable = new PageRequest(page - 1, rows);
+        Page<Role> page = roleService.findALL(pageable);
+        JsonConfig jsonConfig = new JsonConfig();
+        jsonConfig.setExcludes(new String[] {"users", "permissions", "menus"});
         page2json(page, jsonConfig);
         return NONE;
     }
+
+    //使用属性驱动获取menuIds
+    private String menuIds;
+    public void setMenuIds(String menuIds) {
+        this.menuIds = menuIds;
+    }
+    private Long[] permissionIds;
+    public void setPermissionIds(Long[] permissionIds) {
+        this.permissionIds = permissionIds;
+    }
     
     
+    // roleAction_save
+    @Action(value = "roleAction_save", results = {
+            @Result(name = "success", location = "/pages/system/role.html", type = "redirect")})
+    public String save() throws IOException {
+        roleService.save(getModel(),menuIds,permissionIds);
+        
+        return SUCCESS;
+    }
 
 }

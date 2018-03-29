@@ -14,5 +14,7 @@ public interface RoleService {
 
     Page<Role> findALL(Pageable pageable);
 
+    void save(Role model, String menuIds, Long[] permissionIds);
+
 }
   
