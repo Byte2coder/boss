@@ -35,7 +35,7 @@ public class WorkBillJob {
                     + workBill.getPickstate() + "\t" + sDate + "<br/>";
         }
 
-        MailUtils.sendMail("ok@store.com", "工单信息统计", emailBody);
+       MailUtils.sendMail("ok@store.com", "工单信息统计", emailBody);
         System.out.println("邮件已经发送!");
     }
 }
