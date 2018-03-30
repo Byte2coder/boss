@@ -44,6 +44,14 @@ public class Menu implements Serializable {
     @JoinColumn(name = "C_PID")
     private Menu parentMenu;
     
+    public Long getpId(){
+        if (parentMenu==null) {
+            return 0L;
+        }
+        
+        return parentMenu.getId();
+    }
+    
     public String getText(){
         return name;
     }

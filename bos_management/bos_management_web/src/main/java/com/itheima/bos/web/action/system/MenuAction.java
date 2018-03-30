@@ -3,6 +3,8 @@ package com.itheima.bos.web.action.system;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
 import com.itheima.bos.domain.system.Menu;
+import com.itheima.bos.domain.system.User;
 import com.itheima.bos.service.system.MenuService;
 import com.itheima.bos.web.action.CommonAction;
 
@@ -72,7 +75,19 @@ public class MenuAction extends CommonAction<Menu>{
         return NONE;
     }
     
-    //menuAction_findAll
+    //menuAction_findByUser
+    @Action("menuAction_findByUser")
+    public String findByUser() throws IOException{
+     //使用框架获取用户
+      Subject subject = SecurityUtils.getSubject();
+      User user = (User) subject.getPrincipal();
+      List<Menu> list= menuService.findByUser(user);
+      JsonConfig jsonConfig=new JsonConfig();
+      //parentMenu,会产生死循环,要忽略
+      jsonConfig.setExcludes(new String[]{"roles","childrenMenus","parentMenu","children"});
+      list2json(list, jsonConfig);
+        return NONE;
+    }
     
 }
   
