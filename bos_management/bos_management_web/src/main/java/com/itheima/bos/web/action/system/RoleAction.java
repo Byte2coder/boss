@@ -71,4 +71,18 @@ public class RoleAction extends CommonAction<Role> {
         return SUCCESS;
     }
 
+    @Action("roleAction_findAll")
+    public String findAll() throws IOException{
+        Page<Role> page = roleService.findALL(null);
+        List<Role> list = page.getContent();
+        
+        JsonConfig jsonConfig=new JsonConfig();
+        jsonConfig.setExcludes(new String[] {"users", "permissions", "menus"});
+        list2json(list, jsonConfig);
+        
+        return NONE;
+    }
+    
+   
+    
 }
