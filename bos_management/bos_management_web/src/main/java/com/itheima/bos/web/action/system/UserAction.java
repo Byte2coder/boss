@@ -54,6 +54,9 @@ public class UserAction extends CommonAction<User> {
         this.checkcode = checkcode;
     }
 
+    // UnknownAccountException,用户名不一致
+    //IncorrectCredentialsException:密码错误
+
     @Action(value = "userAction_login",
             results = {@Result(name = "success", location = "/index.html", type = "redirect"),
                     @Result(name = "login", location = "/login.html", type = "redirect")
