@@ -130,8 +130,6 @@
 	          2.不能折行
 	perms:用户请求资源时,会去检查用户是否拥有对应的权限,有就放行,没有就跳到unauthorizedUrl.html页面
 	
-	-->
-	    <value>
 	       /css/* = anon
 	       /js/** = anon
 	       /images/* = anon
@@ -140,8 +138,10 @@
 	       /userAction_login.action = anon
 	       /courierAction_pageQuery.action =perms["courierAction_pageQuery"]
 	       /hihi.html =perms["courierAction_pageQuery"]
+	-->
+	    <value>
 	      
-	       /** = authc
+	       /** = anon
 	    </value>
 	</property>
    </bean>

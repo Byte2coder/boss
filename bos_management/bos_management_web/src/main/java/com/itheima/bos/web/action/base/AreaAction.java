@@ -222,6 +222,7 @@ public class AreaAction extends CommonAction<Area>{
         ServletContext servletContext = ServletActionContext.getServletContext();
         HttpServletResponse response = ServletActionContext.getResponse();
        
+        //放在解决乱码之前,是防止重新的编码改变filename的值
         //获取mimeType
         String mimeType = servletContext.getMimeType(filename);
        

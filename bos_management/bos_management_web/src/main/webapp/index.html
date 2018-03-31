@@ -32,7 +32,8 @@
 				};
 				
 				// 基本功能菜单加载
-				$.post("menuAction_findByUser.action",function(data){
+				//$.post("menuAction_findByUser.action",function(data){
+				$.post("./data/menu.json",function(data){
 					$.fn.zTree.init($("#treeMenu"), setting, data);
 				},"json");
 				
