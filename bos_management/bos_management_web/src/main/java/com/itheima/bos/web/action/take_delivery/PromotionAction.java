@@ -2,6 +2,7 @@ package com.itheima.bos.web.action.take_delivery;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -14,6 +15,9 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
 import com.itheima.bos.domain.take_delivery.Promotion;
@@ -67,7 +71,7 @@ public class PromotionAction extends CommonAction<Promotion> {
                     UUID.randomUUID().toString().replaceAll("-", "").toUpperCase() + suffix;
 
             // 保存文件
-            File destFile = new File(dirRealPath + filename);
+            File destFile = new File(dirRealPath +"/"+ filename);
             FileUtils.copyFile(titleImgFile, destFile);
             promotion.setTitleImg("/upload/" + filename);
         } catch (Exception e) {
@@ -83,4 +87,11 @@ public class PromotionAction extends CommonAction<Promotion> {
         return SUCCESS;
     }
 
+    @Action("promotionAction_pageQuery")
+    public String pageQuery() throws IOException{
+        Pageable pageable=new PageRequest(page-1, rows);
+       Page<Promotion> page= promotionService.findAll(pageable);
+       page2json(page, null);
+       return NONE;
+    }
 }

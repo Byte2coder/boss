@@ -199,5 +199,20 @@
 		</property>
 	</bean>
 	
+	 <!-- 发布促销活动webService服务 -->
+    <jaxrs:server address="/promotionService" >
+       <jaxrs:serviceBeans>
+           <ref bean="promotionServiceImpl"/>
+       </jaxrs:serviceBeans>
+    
+       <jaxrs:inInterceptors>
+           <bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+       </jaxrs:inInterceptors>
+       
+       <jaxrs:outInterceptors>
+            <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+       </jaxrs:outInterceptors>
+       
+    </jaxrs:server>
     
 </beans>
